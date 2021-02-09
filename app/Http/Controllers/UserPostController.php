@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Friend;
+use App\Models\AllowedFriend;
 
 class UserPostController extends Controller
 {
@@ -12,10 +13,12 @@ class UserPostController extends Controller
     {
         $posts = $user -> posts()->with(['user', 'likes'])->paginate(10);
         $friends = Friend::All();
+        $allowedfriends = AllowedFriend::All();
         return view('users.posts.index', [
             'user' => $user,
             'posts' => $posts,
-            'friends' => $friends
+            'friends' => $friends,
+            'allowedfriends' => $allowedfriends,
         ]);
     }
 }

@@ -29,6 +29,9 @@
                     <a href="{{ route('messages') }}" class="p-3">Messages</a>
                 </li>
                 <li>
+                    <a href="{{ route('users.allowedfriends') }}" class="p-3">Allowed Friends</a>
+                </li>
+                <li>
                     <a href="{{ route('users.friends') }}" class="p-3">Friends</a>
                 </li>
                 <li>

@@ -11,6 +11,8 @@ use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\AllowedFriendController;
+
 
 
 Auth::routes(['verify' =>true]);
@@ -46,11 +48,17 @@ Route::post('/posts/{post}/comments', [PostCommentController::class, 'store'])->
 
 Route::get('/friends', [FriendController::class, 'index'])->name('users.friends');
 Route::post('/friends', [FriendController::class, 'store'])->name('requser');
-Route::delete('/', [FriendController::class, 'delete'])->name('deleteFriend');
+Route::delete('/friends', [FriendController::class, 'delete'])->name('deleteFriend');
 
 Route::get('/messages', [MessageController::class, 'index'])->name('messages');
 Route::get('/messages/{user:username}', [MessageController::class, 'userMsg'])->name('users.messages');
 Route::post('/messages/{user:username}', [MessageController::class, 'userMsgStore'])->name('users.messages.new');
+
+
+Route::get('/allowedfriends', [AllowedFriendController::class, 'index'])->name('users.allowedfriends');
+Route::post('/allowedfriends', [AllowedFriendController::class, 'store'])->name('allowuser');
+Route::delete('/allowedfriends', [AllowedFriendController::class, 'delete'])->name('deleteFriendAllowed');
+
 
 
 

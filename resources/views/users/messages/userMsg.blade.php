@@ -5,11 +5,11 @@
     <div class="flex flex-row pr-5 pl-5">
         <div class="flex-auto">
             <ul>
-                @foreach($friends as $friend)
+                @foreach($allowedfriends as $friend)
                     @foreach($users as $user)
-                        @if($user -> id == $friend-> user_id and $friend->request_sender_id == auth()->user()->id)
-                            <div style="height:10%;" class="bg-gray-200 w-full">
-                                <li class="mt-2 bg-gray-200">
+                        @if( ( ($friend -> user_id == $user -> id) and ($friend -> request_sender_id == auth()->user()->id) ) or ( ($friend -> user_id == auth()->user()->id) and ($friend -> request_sender_id == $user -> id) ) )
+                            <div style="height:100px;" class="bg-white bg-white w-9/12">
+                                <li style="margin-left:10%;" class="mt-2">
                                     <a href="{{ route('users.messages', $user) }}" class="userM" class="bg-gray-100" value="{{$user->id}}" >{{$user -> username}}</a>
                                 </li>
                             </div>
@@ -34,7 +34,7 @@
                 console.log(e.target.value)
             }
         </script> --}}
-        <div class="flex-auto ml-5 pb-4" style="">
+        <div class="flex-auto pb-4" style="">
             <div class="msgs">
                 @foreach($messages as $message)
                     @if(($message->message_sender_id == auth()->user()->id and $message->user_id == $userM->id) or ($message->user_id == auth()->user()->id and $message->message_sender_id == $userM->id))
@@ -54,7 +54,6 @@
 
         }
         div.msgs {
-
             width: 100%;
             height: 450px;
             /* overflow: scroll; */

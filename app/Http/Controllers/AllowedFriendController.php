@@ -6,17 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Friend;
-use App\Http\Controllers;
-// use Illuminate\Support\Facades\Input;
+use App\Models\AllowedFriend;
 
-class FriendController extends Controller
+class AllowedFriendController extends Controller
 {
     public function index()
     {
-        $friends = Friend::all();
+        $allowedfriends = AllowedFriend::all();
         $users = User::all();
-        return view('users.friends.index', [
-            'friends' => $friends,
+        return view('users.allowedfriends.index', [
+            'allowedfriends' => $allowedfriends,
             'users' => $users,
         ]);
 
@@ -29,21 +28,20 @@ class FriendController extends Controller
     public function store(Request $request)
     {
         // dd(Input::get('reqs'));
-        $friend = new Friend();
-        $friend -> request_sender_id = auth()->user() -> id;
-        $friend -> user_id = $request -> reqs;
-        $friend -> save();
+        $allowedfriend = new AllowedFriend();
+        $allowedfriend -> request_sender_id =  $request -> allow;
+        $allowedfriend -> user_id = auth()->user() -> id;
+        $allowedfriend -> save();
 
+        Friend::where('request_sender_id', $request -> allow)->delete();
         return back();
         // dd($request->reqs);
     }
 
     public function delete(Request $request)
     {
-        Friend::where('user_id', $request -> reqs)->delete();
-
+        AllowedFriend::where('user_id', $request -> reqs)->delete();
         return back();
     }
-
 
 }

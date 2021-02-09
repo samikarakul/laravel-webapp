@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\Friend;
+use App\Models\AllowedFriend;
 
 
 class MessageController extends Controller
@@ -14,10 +15,13 @@ class MessageController extends Controller
     {
         $messages = Message::all();
         $friends = Friend::all();
+        $allowedfriends = AllowedFriend::all();
+
         $users = User::all();
         return view("users.messages.index",[
             'messages' => $messages,
             'friends' =>  $friends,
+            'allowedfriends' =>  $allowedfriends,
             'users' => $users
         ]);
     }
@@ -25,11 +29,13 @@ class MessageController extends Controller
     {
         $messages = Message::all();
         $friends = Friend::all();
+        $allowedfriends = AllowedFriend::all();
         $users = User::all();
 
         return view("users.messages.userMsg",[
             'messages' => $messages,
             'friends' =>  $friends,
+            'allowedfriends' =>  $allowedfriends,
             'users' => $users,
             'userM' => $user
         ]);

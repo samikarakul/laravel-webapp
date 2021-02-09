@@ -5,36 +5,77 @@
         <div class="w-8/12">
             <div class="p-6">
                 <h1 class="text-2xl font-medium mb-1">{{ $user->name }}</h1>
-                @foreach($friends as $friend)
-                    @if($friend -> request_sender_id == auth()->user()->id)
-                        @if($user -> id == $friend -> user_id)
-
-                            <button class="bg-green-600 rounded-xl"><p class="p-3">Send Message</p></button>
-                            <form action="{{ route('deleteFriend') }}" method="POST" class="mb-4" enctype="multipart/form-data">
-                                @csrf
-                                @method('DELETE')
-
-                                    <button value="{{ $user->id }}" type="submit" name="reqs" id="unfollowBtn" class="bg-red-600 rounded-xl"><p class="p-3">Unfollow</p></button>
-                            </form>
-                            @break
-                        @else
+                <p>{{$user->name}} sayfasındayız</p>
+                <p>{{auth()->user()->name}} giriş yapmış.</p>
+                @if($user->name != auth()->user()->name)
+                    @if($friends -> count() != 0)
+                        @foreach($friends as $friend)
+                                @if(($friend -> request_sender_id == auth()->user()->id) and ($user -> id == $friend -> user_id))
+                                    <form action="{{ route('deleteFriend') }}" method="POST" class="mb-4" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('DELETE')
+                                            <button value="{{ $user->id }}" type="submit" name="reqs" class="unfollowBtn bg-red-600 rounded-xl"><p class="p-3">Request Sended</p></button>
+                                    </form>
+                                    @break
+                                @endif
+                        @endforeach
+                    @else
+                        {{-- @if($allowedfriends -> count() != 0) --}}
                             <form action="{{ route('requser') }}" method="POST" class="mb-4" enctype="multipart/form-data">
                                 @csrf
-                                    <button value="{{ $user->id }}" type="submit" name="reqs" id="followBtn" class="bg-green-600 rounded-xl"><p class="p-3">Follow</p></button>
+                                    <button value="{{ $user->id }}" type="submit" name="reqs"  class="followBtn bg-green-600 rounded-xl"><p class="p-3">Follow</p></button>
                             </form>
-                        @endif
-
+                        {{-- @endif --}}
                     @endif
-                @endforeach
+
+                    @if($allowedfriends -> count() != 0)
+                        @foreach($allowedfriends as $allowedfriend)
+                            @if( ($allowedfriend -> request_sender_id == auth()->user()->id) and ($user -> id == $allowedfriend -> user_id) or ($allowedfriend -> request_sender_id == $user -> id) and ($user -> id == auth()->user()->id) )
+                                <form action="{{ route('deleteFriendAllowed') }}" method="POST" class="mb-4" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('DELETE')
+                                        <button value="{{ $user->id }}" type="submit" name="reqs" class="unfollowBtn bg-red-600 rounded-xl"><p class="p-3">Unfollow</p></button>
+                                </form>
+                                @break
+                            @endif
+                        @endforeach
+                     @endif
+                @endif
 
                 <script>
 
                     showPanel();
                     function showPanel() {
-                    var unfBtn = document.getElementById("unfollowBtn");
-                    console.log(unfBtn.innerHTML)
-                    var fBtn = document.getElementById("followBtn");
-                    if(unfBtn != null) fBtn.remove();
+                    var unfBtn = document.getElementsByClassName("unfollowBtn");
+                    var fBtn = document.getElementsByClassName("followBtn");
+                    console.log("fbtn length",fBtn.length)
+
+                    // console.log(typeof(fBtn))
+                    if(fBtn.length != 1)
+                    {
+                        for(var i=0; i<fBtn.length; i++)
+                        {
+                            var a = fBtn[i];
+                            console.log(a);
+
+                            a.remove();
+                        }
+                        // for(const child of fBtn)
+                        // {
+                        //     child.remove();
+                        //     break;
+                        // }
+                    }
+
+                    if(unfBtn.length != 0)
+                    {
+
+                        for(const child of fBtn)
+                        {
+                            child.remove();
+                            console.log("unfbtn kontrol")
+                        }
+                    }
                     // while(fieldNameElement.childNodes.length >= 1) {
                     //     fieldNameElement.removeChild(fieldNameElement.firstChild);
                     // }
@@ -55,7 +96,6 @@
                             <span class="text-gray-600 text-sm"> {{ $post->created_at->diffForHumans() }}</span>
 
                             <p class="mb-2">{{ $post->body }}</p>
-                            <p class="mb-2">{{ $post-> image }}</p>
 
                             <img src="{{ URL::to('images/yuklenen/' . $post->image) }}" />
 

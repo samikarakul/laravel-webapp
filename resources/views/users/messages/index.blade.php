@@ -5,10 +5,11 @@
     <div class="flex flex-row pr-5 pl-5">
         <div class="flex-auto">
             <ul>
-                @foreach($friends as $friend)
+                @foreach($allowedfriends as $friend)
                     @foreach($users as $user)
-                        @if($user -> id == $friend-> user_id and $friend->request_sender_id == auth()->user()->id)
-                            <div style="height:100px;" class="bg-green-300 w-full">
+                        @if( ( ($friend -> user_id == $user -> id) and ($friend -> request_sender_id == auth()->user()->id) ) or ( ($friend -> user_id == auth()->user()->id) and ($friend -> request_sender_id == $user -> id) ) )
+
+                            <div style="height:100px;" class="bg-white w-9/12">
                                 <li style="margin-left:10%;" class="mt-2">
                                     <a href="{{ route('users.messages', $user) }}" class="userM" class="bg-gray-100" value="{{$user->id}}" >{{$user -> username}}</a>
                                 </li>
@@ -33,11 +34,11 @@
             }
         </script> --}}
         <div class="flex-auto ml-5">
-           <h1 style="margin-left: 50%; margin-top:30%;">Ask your friends how they are.</h1>
+           <h1 style="margin-left: 50%; margin-top:30%;">Choose a friend to say "Hi!"</h1>
         </div>
     </div>
 
-    <footer class="fixed pt-5 mr-5 bg-gray-200  border-2 border-gray-300" style="right:0; bottom:0; width:50%;">
+    {{-- <footer class="fixed pt-5 mr-5 bg-gray-200  border-2 border-gray-300" style="right:0; bottom:0; width:50%;">
         <form action="" method="POST" class="mt-3" enctype="multipart/form-data">
             @csrf
             <div class="mb-4 flex flex-row ml-4">
@@ -57,7 +58,7 @@
             </div>
 
         </form>
-    </footer>
+    </footer> --}}
 </div>
 
 
