@@ -82,7 +82,6 @@
                             @foreach ($post->comments as $comment)
                                 <p class="mt-2 ml-5">{{ $comment->username }}</p>
                                 <div class="bg-white mt-2 mb-4 mr-2 ml-2">
-
                                     <p class="mt-2 ml-5">{{ $comment->content }}</p>
                                 </div>
                             @endforeach
